@@ -1,0 +1,397 @@
+###
+library(car)
+library(psych)
+library(ggplot2)
+library(gridExtra)
+library(plyr)
+library(base) #ifelse
+library(scales)
+library(dplyr)
+library(crandatapkgs)
+library(reshape2)
+
+#read csvs
+SALGDATAPREPOST<- read.csv("/Users/Nikki/Desktop/SALG DATA QUANTITATIVE PRE POST FINAL 1148-1151.csv")
+ls(SALGDATAPREPOST)
+file.choose()
+
+################################################
+################################################
+# GENETIC CONCEPTS
+#Question 1 part 1
+#summarise the means
+
+m <- ddply(SALGDATAPREPOST, .(), summarise, mean1.1 = mean(X1.1.1.x, na.rm=TRUE),
+            mean1.2 = mean(X1.1.2.x, na.rm=TRUE),
+            mean1.3 = mean(X1.1.3.x, na.rm=TRUE),
+            mean1.4 = mean(X1.1.4.x, na.rm=TRUE),
+            mean1.5 = mean(X1.1.5.x, na.rm=TRUE),
+            mean1.6 = mean(X1.1.6.x, na.rm=TRUE),
+            mean1.7 = mean(X1.1.7.x, na.rm=TRUE),
+            mean1.8 = mean(X1.1.8.x, na.rm=TRUE),
+            mean1.9 = mean(X1.1.9.x, na.rm=TRUE))
+
+str(SALGDATAPREPOST)
+ls(SALGDATAPREPOST)
+
+m$type <- "PRE"
+
+n <- ddply(SALGDATAPREPOST, .(), summarise, mean1.1 = mean(X1.1.1.y, na.rm=TRUE),
+            mean1.2 = mean(X1.1.2.y, na.rm=TRUE),
+            mean1.3 = mean(X1.1.3.y, na.rm=TRUE),
+            mean1.4 = mean(X1.1.4.y, na.rm=TRUE),
+            mean1.5 = mean(X1.1.5.y, na.rm=TRUE),
+            mean1.6 = mean(X1.1.6.y, na.rm=TRUE),
+            mean1.7 = mean(X1.1.7.y, na.rm=TRUE),
+            mean1.8 = mean(X1.1.8.y, na.rm=TRUE),
+            mean1.9 = mean(X1.1.9.y, na.rm=TRUE))
+n$type <- "POST"
+
+mn1 <- rbind(n,m)
+ls(mn1)
+mn1
+
+#reformat mn in long format
+l <- melt(mn[,c("type", "mean1.1", "mean1.2", "mean1.3", "mean1.4", "mean1.5", "mean1.6", "mean1.7", "mean1.8", "mean1.9")], id.vars="type")
+
+#bargraph
+p <- ggplot(l, aes(x= variable, y=value, fill=type)) +
+              geom_bar(stat = 'identity', position='dodge')
+p  <- p  + ggtitle("SALG Understanding\n Genetics Concepts Average\n") + xlab("") + ylab("Understanding Averages\n")
+p  <- p  + theme(plot.title = element_text(size=30, color="black", vjust=3), 
+                 axis.title = element_text(size=20),
+                 axis.text = element_text(color="black"), 
+                 axis.text.y = element_text(size = 14),
+                 axis.text.x = element_text(angle=45, vjust=0.8, hjust=0.8, size=18))
+p <- p + labs(fill="")
+p <- p + scale_fill_manual(values=c("darkolivegreen3","coral"), 
+                           name="",
+                           labels=c("POST","PRE"))
+p <- p +  guides(fill=guide_legend(reverse=T), size=30) #reverse the legend
+p <- p + scale_x_discrete(labels=c("Heredity","Cell structure","DNA structure",
+                                   "Transcription Prokaryotes","Transcription Eukaryotes","Translation Genetics",
+                                   "Transmission Genetics","Population Genetics ","Everyday Genetics"))
+p <- p + scale_y_continuous(breaks=c(0,1,2,3,4,5))
+print(p)
+
+
+### Average of Genetic Concepts
+mn1$avg <- with(mn1, ((mean1.1+mean1.2+mean1.3+mean1.4+mean1.5+mean1.6+mean1.7+mean1.8+mean1.9)/9))
+l <- melt(mn1[,c("type", "avg")], id.vars="type")
+
+
+p <- ggplot(l, aes(x="Average", y=value, fill=type)) +
+  geom_bar(stat = 'identity', position='dodge')
+p
+
+################################################
+################################################
+
+#Question 1 part 2
+#summarise the means
+?
+m <- ddply(SALGDATAPREPOST, .(), summarise, mean1.2.1 = mean(X1.2.x, na.rm=TRUE ),
+           mean1.3.1 = mean(X1.3.x, na.rm=TRUE),
+           mean1.4.1 = mean(X1.4.x, na.rm=TRUE), 
+           mean1.5.1 = mean(X1.5.x, na.rm=TRUE))
+
+str(SALGDATAPREPOST)
+ls(SALGDATAPREPOST)
+
+m$type <- "PRE"
+
+n <- ddply(SALGDATAPREPOST, .(), summarise, mean1.2.1 = mean(X1.2.y, na.rm=TRUE),
+     mean1.3.1 = mean(X1.3.y, na.rm=TRUE),
+     mean1.4.1 = mean(X1.4.y, na.rm=TRUE),
+     mean1.5.1 = mean(X1.5.y, na.rm=TRUE))
+n$type <- "POST"
+
+mn2 <- rbind(n,m)
+ls(mn)
+
+#reformat mn in long format
+l2 <- melt(mn2[,c("type", "mean1.2.1", "mean1.3.1", "mean1.4.1", "mean1.5.1")], id.vars="type")
+
+#bargraph
+p <- ggplot(l2, aes(x= variable, y=value, fill=type)) +
+  geom_bar(stat = 'identity', position='dodge')
+p  <- p  + ggtitle("SALG Understanding\n Genetics Concepts") + xlab("") + ylab("Leves of Understanding")
+p  <- p  + theme(plot.title = element_text(size=13
+                                           , color="black", vjust=3), 
+                 axis.text = element_text(color="black"), 
+                 axis.text.y = element_text(size = 0.2),
+                 axis.text.x = element_text(angle=90, vjust=1, hjust=0.8, size=7))
+p <- p + labs(fill="")
+p <- p + scale_fill_manual(values=c("darksalmon","darkslategray2"), 
+                           name="",
+                           labels=c("POST","PRE"))
+p <- p +  guides(fill=guide_legend(reverse=T)) #reverse the legend
+p <- p + scale_x_discrete(labels=c("Relationship Main\nConcept","Relations MainIdea\n related classes",
+                                   "Relation Main Idea\n & outside classes","Genetics\n & Real World issues",
+                                   "Understanding"))
+p
+print(p)
+##Average##
+mn2$avg <- with(mn2, ((mean1.2.1+mean1.3.1+mean1.4.1+mean1.5.1)/4))
+l <- melt(mn2[,c("type", "avg")], id.vars="type")
+
+
+p <- ggplot(l, aes(x="", y=value, fill=type)) +
+  geom_bar(stat = 'identity', position='dodge')
+
+p
+
+################################################
+################################################
+
+##Question 2 
+m <- ddply(SALGDATAPREPOST, .(), summarise,mean2.1 = mean(X2.1.x, na.rm=TRUE),
+           mean2.2 = mean(X2.2.x, na.rm=TRUE),
+           mean2.3 = mean(X2.3.x, na.rm=TRUE),
+           mean2.4 = mean(X2.4.x, na.rm=TRUE),
+           mean2.5 = mean(X2.5.x, na.rm=TRUE),
+           mean2.6 = mean(X2.6.x, na.rm=TRUE),
+           mean2.7 = mean(X2.7.x, na.rm=TRUE),
+           mean2.8 = mean(X2.8.x, na.rm=TRUE))
+m$type <- "PRE"
+
+n <- ddply(SALGDATAPREPOST, .(), summarise,mean2.1 = mean(X2.1.y, na.rm=TRUE),
+           mean2.2 = mean(X2.2.y, na.rm=TRUE),
+           mean2.3 = mean(X2.3.y, na.rm=TRUE),
+           mean2.4 = mean(X2.4.y, na.rm=TRUE),
+           mean2.5 = mean(X2.5.y, na.rm=TRUE),
+           mean2.6 = mean(X2.6.y, na.rm=TRUE),
+           mean2.7 = mean(X2.7.y, na.rm=TRUE),
+           mean2.8 = mean(X2.8.y, na.rm=TRUE))
+          
+n$type <- "POST"
+mn3 <- rbind(n,m)
+#reformat mn in long format question 2
+p <- ggplot(l3, aes(x= variable, y=value, fill=type)) +
+  geom_bar(stat = 'identity', position='dodge')
+p  <- p  + ggtitle("SALG Skills") + xlab("") + ylab("Level of Skills")
+p  <- p  + theme(plot.title = element_text(size=13
+                                           , color="black", vjust=3), 
+                 axis.text = element_text(color="black"), 
+                 axis.text.y = element_text(size = 0.2),
+                 axis.text.x = element_text(angle=90, vjust=1, hjust=0.8, size=7))
+p <- p + labs(fill="")
+p <- p + scale_fill_manual(values=c("darksalmon","darkslategray2"), 
+                           name="",
+                           labels=c("POST","PRE"))
+p <- p +  guides(fill=guide_legend(reverse=T)) #reverse the legend
+p <- p + scale_x_discrete(labels=c("Probability","Logical Argument",
+                                   "Answer Short Questions","Working With Others",
+                                   "Oral Presentations","Finding Articles","Critical Reading","Recognize sound\n argument "))
+p
+print(p)
+
+mn3$avg <- with(mn3,((mean2.1+mean2.2+mean.3+mean2.4+mean2.5+mean2.6+mean2.7+mean2.8)/8))
+l <- melt(mn3[,c("type", "avg")], id.vars="type")
+
+
+p <- ggplot(l, aes(x="", y=value, fill=type)) +
+  geom_bar(stat = 'identity', position='dodge')
+p
+################################################
+################################################
+
+##### Question 3 ####
+
+m <- ddply(SALGDATAPREPOST, .(), summarise,mean3.1 = mean(X3.1.x, na.rm=TRUE),
+           mean3.2 = mean(X3.2.x, na.rm=TRUE),
+           mean3.3 = mean(X3.3.x, na.rm=TRUE),
+           mean3.4 = mean(X3.4.x, na.rm=TRUE),
+           mean3.5 = mean(X3.5.x, na.rm=TRUE),
+           mean3.6 = mean(X3.6.x, na.rm=TRUE),
+           mean3.7 = mean(X3.7.x, na.rm=TRUE),
+           mean3.8 = mean(X3.8.x, na.rm=TRUE),
+           mean3.9 = mean(X3.9.x, na.rm=TRUE))
+m$type <- "PRE"
+
+n <- ddply(SALGDATAPREPOST, .(), summarise,mean3.1 = mean(X3.1.y, na.rm=TRUE),
+           mean3.2= mean(X3.2.y, na.rm=TRUE),
+           mean3.3 = mean(X3.3.y, na.rm=TRUE),
+           mean3.4 = mean(X3.4.y, na.rm=TRUE),
+           mean3.5 = mean(X3.5.y, na.rm=TRUE),
+           mean3.6 = mean(X3.6.y, na.rm=TRUE),
+           mean3.7 = mean(X3.7.y, na.rm=TRUE),
+           mean3.8 = mean(X3.8.y, na.rm=TRUE),
+           mean3.9 = mean(X3.9.y, na.rm=TRUE))
+n$type <- "POST"
+
+mn4 <- rbind(n,m)
+#reformat mn in long format question 4
+l4 <- melt(mn4[,c("type","mean3.1","mean3.2","mean3.3","mean3.4","mean3.5","mean3.6","mean3.7","mean3.8","mean3.9")], id.vars="type")
+
+#bargraph
+p <- ggplot(l4, aes(x= variable, y=value, fill=type)) +
+  geom_bar(stat = 'identity', position='dodge')
+p  <- p  + ggtitle("SALG Attitudes") + xlab("") + ylab("Level of Agreement")
+p  <- p  + theme(plot.title = element_text(size=15
+                                           , color="black", vjust=3), 
+                 axis.text = element_text(color="black"), 
+                 axis.text.y = element_text(size = 0.2),
+                 axis.text.x = element_text(angle=90, vjust=1, hjust=0.8, size=7))
+p <- p + labs(fill="")
+p <- p + scale_fill_manual(values=c("darksalmon","darkslategray2"), 
+                           name="",
+                           labels=c("POST","PRE"))
+p <- p +  guides(fill=guide_legend(reverse=T)) #reverse the legend
+p <- p + scale_x_discrete(labels=c("Enthusiasm About\n Genetics ","Interest discussing w\\n Family",
+                                   "Answer Short Questions","Working With Others",
+                                   "Interest In Taking other\n classes in this subject","Confidence In Understanding",
+                                   "Willing To Seek Help","Enthusiasm About Science","Confidence In Understanding\n Science",
+                                   "Confidence In Doing\nScience","Eager To Work In Science"))
+p
+print(p)
+### Average ###
+mn4$avg <- with(mn4, ((mean3.1+mean3.2+mean3.3+mean3.4+mean3.5+mean3.6+mean3.7+mean3.8+mean3.9)/9))
+l <- melt(mn4[,c("type", "avg")], id.vars="type")
+
+
+p <- ggplot(l, aes(x="", y=value, fill=type)) +
+  geom_bar(stat = 'identity', position='dodge')
+p
+################################################
+################################################
+
+###### Question 4 ###### 
+ls(SALGDATAPREPOST)
+
+m <- ddply(SALGDATAPREPOST, .(), summarise,mean4.1 = mean(X4.1.x, na.rm=TRUE),
+           mean4.2 = mean(X4.2.x, na.rm=TRUE),
+           mean4.3 = mean(X4.3.x, na.rm=TRUE),
+           mean4.5 = mean(X4.5.x, na.rm=TRUE),
+           mean4.6 = mean(X4.6.x, na.rm=TRUE),
+           mean4.7 = mean(X4.7.x, na.rm=TRUE))
+m$type <- "PRE"
+
+n <- ddply(SALGDATAPREPOST, .(), summarise,mean4.1 = mean(X4.1.y, na.rm=TRUE),
+           mean4.2 = mean(X4.2.y, na.rm=TRUE),
+           mean4.3 = mean(X4.3.y, na.rm=TRUE),
+           mean4.5 = mean(X4.5.y, na.rm=TRUE),
+           mean4.6 = mean(X4.6.y, na.rm=TRUE),
+           mean4.7 = mean(X4.7.y, na.rm=TRUE))
+
+n$type <- "POST"
+mn5 <- rbind(n,m)
+
+#reformat mn in long format question 4
+l5 <- melt(mn5[,c("type","mean4.1","mean4.2","mean4.3","mean4.5","mean4.3","mean4.7")], id.vars="type")
+
+#bargraph
+p <- ggplot(l5, aes(x= variable, y=value, fill=type)) +
+  geom_bar(stat = 'identity', position='dodge')
+p  <- p  + ggtitle("SALG Integration of Learning") + xlab("") + ylab("Agreement with\n 'I'm In The Habit of..'")
+p  <- p  + theme(plot.title = element_text(size=13
+                                           , color="black", vjust=3), 
+                 axis.text = element_text(color="black"), 
+                 axis.text.y = element_text(size = 0.2),
+                 axis.text.x = element_text(angle=90, vjust=1, hjust=0.8, size=7))
+p <- p + labs(fill="")
+p <- p + scale_fill_manual(values=c("darksalmon","darkslategray2"), 
+                           name="",
+                           labels=c("POST","PRE"))
+p <- p +  guides(fill=guide_legend(reverse=T)) #reverse the legend
+p <- p + scale_x_discrete(labels=c("Connecting Key Ideas\n With Previous Knowlegde",
+                                   "Applying What I Learned In class\n With Other Situtations","Using Systematic Reasoning",
+                                   "Using Critical Approach","Studying Regularly","Studying Effectively"))
+p
+###Average #####
+mn5$avg <- with(mn5, ((mean4.1+mean4.2+mean4.3+mean4.5+mean4.6+mean4.7)/6))
+l <- melt(mn4[,c("type", "avg")], id.vars="type")
+
+
+p <- ggplot(l, aes(x="", y=value, fill=type)) +
+  geom_bar(stat = 'identity', position='dodge')
+p
+
+################################################
+################################################
+
+### Question 5 ####
+
+m <- ddply(SALGDATAPREPOST, .(), summarise,mean5.1 = mean(X5.1.x, na.rm=TRUE),
+           mean5.2 = mean(X5.2.x, na.rm=TRUE),
+           mean5.3 = mean(X5.3.x, na.rm=TRUE))
+        
+
+m$type <-"PRE"
+
+n <- ddply(SALGDATAPREPOST, .(), summarise, mean5.1 = mean(X5.1.y, na.rm=TRUE),
+           mean5.2 = mean(X5.2.y, na.rm=TRUE),
+           mean5.3 = mean(X5.3.y, na.rm=TRUE))
+n$type <-"POST"
+
+mn6 <- rbind(n,m)
+#reformat mn in long format question 5
+l6 <- melt(mn6[,c("type","mean5.1","mean5.2","mean5.3")], id.vars="type")
+
+#bargraph
+p <- ggplot(l6, aes(x= variable, y=value, fill=type)) +
+  geom_bar(stat = 'identity', position='dodge')
+
+p  <- p  + ggtitle("SALG Classroom Experience\n Genetics Concepts") + xlab("") + ylab("Level of Confidence")
+p  <- p  + theme(plot.title = element_text(size=15
+                                           , color="black", vjust=3), 
+                 axis.text = element_text(color="black"), 
+                 axis.text.y = element_text(size = 0.2),
+                 axis.text.x = element_text(angle=90, vjust=1, hjust=0.8, size=7))
+p <- p + labs(fill="")
+p <- p + scale_fill_manual(values=c("darksalmon","darkslategray2"), 
+                           name="",
+                           labels=c("POST","PRE"))
+p <- p +  guides(fill=guide_legend(reverse=T)) #reverse the legend
+p <- p + scale_x_discrete(labels=c("Comfortable Working\n Within A Group ","Use Of Self-Assessment\n To Improve Studying",
+                                   "Confident To Ask Questions\n Partipation in Disscussions"))
+p
+print(p)
+
+################################################
+################################################
+
+### Question 8 ####
+
+table(SALGDATAPREPOST$X8.1.x, useNA="always")
+table(SALGDATAPREPOST$X8.1.y, useNA="always")
+
+m <-ddply(SALGDATAPREPOST, .(), summarise, yes8.1= sum(X8.1.x==1),
+          yes8.2 = sum(X8.2.x==1),
+          yes8.3 = sum(X8.3.x==1))
+           
+m$type <-"PRE"
+           
+n <- ddply(SALGDATAPREPOST, .(), summarise, yes8.1= sum(X8.1.y==1),
+                      yes8.2 = sum(X8.2.y==1),
+                      yes8.3 = sum(X8.3.y==1))
+           
+n$type <-"POST"
+n
+           
+ mn7 <- rbind(n,m)
+ #reformat mn in long format question 8 
+ l7 <- melt(mn7[,c("type", "yes8.1","yes8.2","yes8.3")], id.vars="type")
+ 
+ #bargraph
+ p <- ggplot(l7, aes(x= variable, y=value, fill=type)) +
+   geom_bar(stat = 'identity', position='dodge')
+ p  <- p  + ggtitle("SALG Major\n Genetics Concepts") + xlab("") + ylab("Count of Yes")
+ p  <- p  + theme(plot.title = element_text(size=15
+                                            , color="black", vjust=3), 
+                  axis.text = element_text(color="black"), 
+                  axis.text.y = element_text(size = 0.2),
+                  axis.text.x = element_text(angle=90, vjust=1, hjust=0.8, size=7))
+ p <- p + labs(fill="")
+ p <- p + scale_fill_manual(values=c("darksalmon","darkslategray2"), 
+                            name="",
+                            labels=c("POST","PRE"))
+ p <- p +  guides(fill=guide_legend(reverse=T)) #reverse the legend
+ p <- p + scale_x_discrete(labels=c("Major In This\n Subejct Area"," Not A Major In This\n Subejct Area",
+                                    "Undecided at This Time"))
+ p
+ print(p)
+ 
+
+
+
