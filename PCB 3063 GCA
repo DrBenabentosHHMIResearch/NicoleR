@@ -1,3 +1,4 @@
+
 ## GCA DATA R-SCRPIT JULY 20,2016 ##
 library(car)
 library(psych)
@@ -494,7 +495,7 @@ grid.arrange(r, p, q, nrow=1,ncol=3)
 t.test(GCADATAPRE_POSTFINAL$TotalPOST, GCADATAPRE_POSTFINAL$TotalPRE, paired=TRUE)
 describeBy(GCADATAPRE_POSTFINAL$TotalPRE)
 describeBy(GCADATAPRE_POSTFINAL$TotalPOST)
-describeBy(GCADATAPRE_POSTFINAL$NormGain)
+describeBy(GCADATAPRE_POSTFINAL$NormGain)`
 
 
 table(GCADATAPRE$TotalPRE)
@@ -512,7 +513,107 @@ table(GCADATAPOST$TERM)
 nrow(subset(GCADATAPRE_POSTFINAL, TERM=="1151"))
 nrow(subset(GCADATAPRE, TERM=="1151")
 GCADATAPRE_POSTFINAL<-merge(subset(GCADATAPRE,TERM=="1158"),GCADATAPOST,by=c("ID","TERM"))
+
 # 10 student took PRE and not post in 1148 (26 took both)
 # No pre students in 1151 match post
 # 17 students too PRE and no post in 1158 (22 took both)
 
+######## Percent Correct ########
+###PRE###
+m_1<- ddply(GCADATAPRE_POSTFINAL, .(),summarise,Q1perc=sum(Q1_PRE_r==1)/sum(!is.na(Q1_PRE_r),na.rm=TRUE)*100,
+          Q2perc=sum(Q2_PRE_r==1)/sum(!is.na(Q2_PRE_r),na.rm=TRUE)*100,
+          Q3perc=sum(Q3_PRE_r==1)/sum(!is.na(Q3_PRE_r),na.rm=TRUE)*100,
+          Q4perc=sum(Q4_PRE_r==1)/sum(!is.na(Q4_PRE_r),na.rm=TRUE)*100,
+          Q5perc=sum(Q5_PRE_r==1)/sum(!is.na(Q5_PRE_r),na.rm=TRUE)*100,
+          Q6perc=sum(Q6_PRE_r==1)/sum(!is.na(Q6_PRE_r),na.rm=TRUE)*100,
+          Q7perc=sum(Q7_PRE_r==1)/sum(!is.na(Q7_PRE_r),na.rm=TRUE)*100,
+          Q8perc=sum(Q8_PRE_r==1)/sum(!is.na(Q8_PRE_r),na.rm=TRUE)*100,
+          Q9perc=sum(Q9_PRE_r==1)/sum(!is.na(Q9_PRE_r),na.rm=TRUE)*100,
+          Q10perc=sum(Q10_PRE_r==1)/sum(!is.na(Q10_PRE_r),na.rm=TRUE)*100,
+          Q11perc=sum(Q11_PRE_r==1)/sum(!is.na(Q11_PRE_r),na.rm=TRUE)*100,
+          Q12perc=sum(Q12_PRE_r==1)/sum(!is.na(Q12_PRE_r),na.rm=TRUE)*100,
+          Q13perc=sum(Q13_PRE_r==1)/sum(!is.na(Q13_PRE_r),na.rm=TRUE)*100,
+          Q14perc=sum(Q14_PRE_r==1)/sum(!is.na(Q14_PRE_r),na.rm=TRUE)*100,
+          Q15perc=sum(Q15_PRE_r==1)/sum(!is.na(Q15_PRE_r),na.rm=TRUE)*100,
+          Q16perc=sum(Q16_PRE_r==1)/sum(!is.na(Q16_PRE_r),na.rm=TRUE)*100,
+          Q17perc=sum(Q17_PRE_r==1)/sum(!is.na(Q17_PRE_r),na.rm=TRUE)*100,
+          Q18perc=sum(Q18_PRE_r==1)/sum(!is.na(Q18_PRE_r),na.rm=TRUE)*100,
+          Q19perc=sum(Q19_PRE_r==1)/sum(!is.na(Q19_PRE_r),na.rm=TRUE)*100,
+          Q20perc=sum(Q20_PRE_r==1)/sum(!is.na(Q20_PRE_r),na.rm=TRUE)*100,
+          Q21perc=sum(Q21_PRE_r==1)/sum(!is.na(Q21_PRE_r),na.rm=TRUE)*100,
+          Q22perc=sum(Q22_PRE_r==1)/sum(!is.na(Q22_PRE_r),na.rm=TRUE)*100,
+          Q23perc=sum(Q23_PRE_r==1)/sum(!is.na(Q23_PRE_r),na.rm=TRUE)*100,
+          Q24perc=sum(Q24_PRE_r==1)/sum(!is.na(Q24_PRE_r),na.rm=TRUE)*100,
+          Q25perc=sum(Q25_PRE_r==1)/sum(!is.na(Q25_PRE_r),na.rm=TRUE)*100)
+          
+m_1$type<-"PRE"
+n_1$type<-"POST"
+ls(m_1)
+ls(n_1)
+
+
+Pre_postmelt<- melt(PREPOSTPERCENT[,c("type","Q1perc","Q2perc","Q3perc","Q4perc","Q5perc","Q6perc","Q7perc",
+                                      "Q8perc","Q9perc","Q10perc","Q11perc","Q12perc","Q13perc","Q14perc","Q15perc",
+                                       "Q16perc","Q17perc","Q18perc","Q19perc","Q20perc","Q21perc","Q22perc","Q23perc",
+                                       "Q24perc","Q25perc")], id.vars="type")
+                                   
+                                   Pre_postmelt<- melt(PREPOSTPERCENT [,c("Q1perc","Q2perc","Q3perc")], id.vars=.())
+
+#create a column $type <- "PRE"
+#do the same with post (also call it type <- "POST") and redo the rbind
+#when you do the melt do id.vars = "type"
+### POST ######     
+n_1<- ddply(GCADATAPRE_POSTFINAL, .(),summarise,Q1perc=sum(Q1_PRE_r==1)/sum(!is.na(Q1_POST_r),na.rm=TRUE)*100,
+          Q2perc=sum(Q2_POST_r==1)/sum(!is.na(Q2_POST_r),na.rm=TRUE)*100,
+          Q3perc=sum(Q3_POST_r==1)/sum(!is.na(Q3_POST_r),na.rm=TRUE)*100,
+          Q4perc=sum(Q4_POST_r==1)/sum(!is.na(Q4_POST_r),na.rm=TRUE)*100,
+          Q5perc=sum(Q5_POST_r==1)/sum(!is.na(Q5_POST_r),na.rm=TRUE)*100,
+          Q6perc=sum(Q6_POST_r==1)/sum(!is.na(Q6_POST_r),na.rm=TRUE)*100,
+          Q7perc=sum(Q7_POST_r==1)/sum(!is.na(Q7_POST_r),na.rm=TRUE)*100,
+          Q8perc=sum(Q8_POST_r==1)/sum(!is.na(Q8_POST_r),na.rm=TRUE)*100,
+          Q9perc=sum(Q9_POST_r==1)/sum(!is.na(Q9_POST_r),na.rm=TRUE)*100,
+          Q10perc=sum(Q10_POST_r==1)/sum(!is.na(Q10_POST_r),na.rm=TRUE)*100,
+          Q11perc=sum(Q11_POST_r==1)/sum(!is.na(Q11_POST_r),na.rm=TRUE)*100,
+          Q12perc=sum(Q12_POST_r==1)/sum(!is.na(Q12_POST_r),na.rm=TRUE)*100,
+          Q13perc=sum(Q13_POST_r==1)/sum(!is.na(Q13_POST_r),na.rm=TRUE)*100,
+          Q14perc=sum(Q14_POST_r==1)/sum(!is.na(Q14_POST_r),na.rm=TRUE)*100,
+          Q15perc=sum(Q15_POST_r==1)/sum(!is.na(Q15_POST_r),na.rm=TRUE)*100,
+          Q16perc=sum(Q16_POST_r==1)/sum(!is.na(Q16_POST_r),na.rm=TRUE)*100,
+          Q17perc=sum(Q17_POST_r==1)/sum(!is.na(Q17_POST_r),na.rm=TRUE)*100,
+          Q18perc=sum(Q18_POST_r==1)/sum(!is.na(Q18_POST_r),na.rm=TRUE)*100,
+          Q19perc=sum(Q19_POST_r==1)/sum(!is.na(Q19_POST_r),na.rm=TRUE)*100,
+          Q20perc=sum(Q20_POST_r==1)/sum(!is.na(Q20_POST_r),na.rm=TRUE)*100,
+          Q21perc=sum(Q21_POST_r==1)/sum(!is.na(Q21_POST_r),na.rm=TRUE)*100,
+          Q22perc=sum(Q22_POST_r==1)/sum(!is.na(Q22_POST_r),na.rm=TRUE)*100,
+          Q23perc=sum(Q23_POST_r==1)/sum(!is.na(Q23_POST_r),na.rm=TRUE)*100,
+          Q24perc=sum(Q24_POST_r==1)/sum(!is.na(Q24_POST_r),na.rm=TRUE)*100,
+          Q25perc=sum(Q25_POST_r==1)/sum(!is.na(Q25_POST_r),na.rm=TRUE)*100)
+                          
+                                  
+Pre_postmelt$label <- format(round(Pre_postmelt$value,2))
+
+PREPOSTPERCENT<-rbind(m_1,n_1)
+
+##### GRAPHS#### 
+#### percent pre and post###
+p <- ggplot(Pre_postmelt, aes(x= variable, y=value, fill=type)) +
+  geom_bar(stat = 'identity', position='dodge')
+p  <- p  + ggtitle("GCA Data Questions Percentage Scores") + xlab("") + ylab("Average percent per question")
+p  <- p  + theme(plot.title = element_text(size=30, color="Black", vjust=3), 
+                 axis.title = element_text(size=20),
+                 axis.text = element_text(color="black"), 
+                 axis.text.y = element_text(size = 14),
+                 axis.text.x = element_text(angle=90, vjust=0.8, hjust=0.8, size=18))
+p <- p + labs(fill="white")
+p <- p + scale_fill_manual(values=c("aliceblue","bisque1"), 
+                           name="",
+                           labels=c("POST","PRE"))
+p <- p +  guides(fill=guide_legend(reverse=T), size=30) #reverse the legend
+p <- p + scale_x_discrete(labels=c("Q1perc","Q2perc","Q3perc","Q4perc","Q5perc","Q6perc","Q7perc",
+                                   "Q8perc","Q9perc","Q10perc","Q11perc","Q12perc","Q13perc","Q14perc","Q15perc",
+                                   "Q16perc","Q17perc","Q18perc","Q19perc","Q20perc","Q21perc","Q22perc","Q23perc",
+                                   "Q24perc","Q25perc"))
+p <- p + scale_y_continuous(breaks=c())
+p<- p+ geom_text(aes(label=(label)),size=3,position = position_dodge(width = 1), angle=0.9 ) ### code to put labels above bars#
+make sure your numbers are in percent it will look like a mess if not###
+print(p)
