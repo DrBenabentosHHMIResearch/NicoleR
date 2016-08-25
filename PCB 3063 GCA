@@ -614,6 +614,7 @@ p <- p + scale_x_discrete(labels=c("Q1perc","Q2perc","Q3perc","Q4perc","Q5perc",
                                    "Q16perc","Q17perc","Q18perc","Q19perc","Q20perc","Q21perc","Q22perc","Q23perc",
                                    "Q24perc","Q25perc"))
 p <- p + scale_y_continuous(breaks=c())
-p<- p+ geom_text(aes(label=(label)),size=3,position = position_dodge(width = 1), angle=0.9 ) ### code to put labels above bars#
-make sure your numbers are in percent it will look like a mess if not###
+p<- p+ geom_text(aes(label=(label)),size=3, vjust=1,hjust=0.8,angle=90,position = position_dodge(width = 1))
+print(p)### code to put labels above bars#
+############make sure your numbers are in percent ###
 print(p)
