@@ -594,6 +594,9 @@ Pre_postmelt$label <- format(round(Pre_postmelt$value,2))
 
 PREPOSTPERCENT<-rbind(m_1,n_1)
 
+Pre_postmelt$type <- factor(Pre_postmelt$type, levels=c("PRE", "POST")) #change the order of variables to have PRE first
+#### change order of variables ###
+
 ##### GRAPHS#### 
 #### percent pre and post###
 p <- ggplot(Pre_postmelt, aes(x= variable, y=value, fill=type)) +
